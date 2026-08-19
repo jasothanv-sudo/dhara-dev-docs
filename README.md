@@ -1,0 +1,37 @@
+# DHARA — developer documentation archive
+
+The technical/developer manual for DHARA's solver — theory, architecture,
+and installation — as distinct from the **customer-facing** user manual
+that ships inside the product itself (`dhara_jaso/manual/DHARA_User_Manual.md`,
+rendered live in the desktop app's Help Center). This repo exists to keep
+every version of this document in one place; it isn't itself part of the
+shipped product.
+
+## The three versions here, oldest to newest
+
+| File | Scope | Size |
+|---|---|---|
+| `DHARA_compressible_documentation.md` | Compressible module only — v1 | 15.6 KB |
+| `DHARA_compressible_documentationv2.md` | Compressible module only — v2, expanded | 20.7 KB |
+| `dhara_document.md` | **All four modules** (Compressible, Convection, Rayleigh–Bénard, Quantum) — installation guide, architecture, and per-module theory, chaptered | 44.7 KB |
+
+`dhara_document.md` is the current, most complete version — it grew from
+a single-module writeup into a full framework manual, chapter by chapter
+(Chapter 0: installation, Chapter 1: architecture, Chapter 2 onward:
+per-module theory). The two compressible-only files are kept as the
+earlier stages of that same document's history, not duplicated content to
+choose between.
+
+## Provenance
+
+Recovered 2026-08-19 from two now-retired repositories:
+`DHARA_compressible_documentation.md` and `DHARA_compressible_documentationv2.md`
+came from `Dhara-J` (the original pre-rename DHARA package repo, superseded
+by `DHARA_Local` and deleted after these were extracted).
+`dhara_document.md` came from `public_one` (a repo that also held an
+identical copy of `DHARA_compressible_documentationv2.md`, named
+`document.md` — confirmed byte-for-byte identical before being left out of
+this collection as a straight duplicate).
+
+See [`vayusoft-docs`](https://github.com/jasothanv-sudo/vayusoft-docs) for
+the full map of every other DHARA/TARANG repository.
