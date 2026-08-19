@@ -1,0 +1,421 @@
+================================================================================
+DHARA DOCUMENTATION PROJECT — HANDOFF FILE
+Generated for transfer to a new chat session
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION A: PROJECT CONTEXT
+--------------------------------------------------------------------------------
+
+Source material:
+Original file read from:
+https://github.com/jasothanv-sudo/public_one/blob/6e9f3c0267b8c59f2b84e771e964bc5444aae64f/document.md
+
+This source is existing documentation for the DHARA solver's COMPRESSIBLE
+MODULE ONLY, covering: installation, running simulations via para.py, a worked
+512x512 Taylor-Green Vortex GPU example with results, theory/governing
+equations, and package file structure.
+
+Goal:
+Expand this into a unified documentation set covering FOUR simulation
+modules: Convection, Quantum, Rayleigh-Benard Convection, and Compressible.
+
+Standing instruction from user (applies throughout):
+Do NOT generate/draft new content unless explicitly asked. Only track/note
+requested changes until the user asks for drafting. (This instruction has
+since been fulfilled for the items marked "DRAFTED" below, but should
+continue to apply going forward in the new chat.)
+
+--------------------------------------------------------------------------------
+SECTION B: ALL CHANGES / REQUIREMENTS NOTED (CHRONOLOGICAL)
+--------------------------------------------------------------------------------
+
+1. INSTALLATION CHANGE (Chapter 0 / originally SS1.6 in source doc)
+   STATUS: Noted, NOT YET DRAFTED.
+   - Replace the step:
+       conda install -c conda-forge openmpi -y   # an MPI implementation
+       pip install mpi4py
+   - With: a manual download-and-install link for an MPI implementation
+     (e.g. Open MPI: https://www.open-mpi.org/software/ompi/ or MPICH:
+     https://www.mpich.org/downloads/), instead of using conda-forge.
+     pip install mpi4py still follows afterward.
+   - Exact wording/link choice was left open pending user confirmation of
+     which MPI implementation to document.
+
+2. SCOPE EXPANSION — 4 SIMULATION MODULES
+   STATUS: Structural decision made; content partially drafted (see Section C).
+   The documentation now covers 4 simulation options:
+     - Convection
+     - Quantum
+     - Rayleigh-Benard convection
+     - Compressible (existing/original content)
+
+3. OVERALL CHAPTER STRUCTURE (as specified by user, then amended)
+   STATUS: Structural decision made.
+   Original structure specified by user:
+     - Chapter 0: Installation guide
+     - Chapters 1-4: Theory and equations solved, one chapter per simulation
+       module (order given by user: the 4 modules above)
+     - Chapter 5: para.py file details — how to edit it, explaining all
+       parameters, to run desired simulations
+     - Chapter 6: Example simulation of TGV (Taylor-Green Vortex) with
+       results, relevant graphs and images
+     - Chapter 7: Details about available provisions to run other similar
+       problems (e.g. Sod shock tube, etc.)
+
+   LATER AMENDMENT (most recent structural change):
+     A NEW chapter was inserted immediately after Chapter 4 (theory chapters)
+     and before the para.py chapter, containing information about ALL
+     available problems and sub-problems. User will supply this content
+     later — nothing drafted yet for this chapter.
+
+   RESULTING CURRENT CHAPTER STRUCTURE:
+     - Chapter 0 — Installation Guide
+     - Chapters 1-4 — Theory (Convection, Quantum, Rayleigh-Benard,
+       Compressible) [theory content DRAFTED — see Section C]
+     - Chapter 5 (NEW) — Available Problems and Sub-Problems
+       [PLACEHOLDER — user will provide content later; nothing drafted]
+     - Chapter 6 — The para.py File: full parameter reference, how to
+       configure/run simulations [NOT YET DRAFTED]
+     - Chapter 7 — Example Run: 512x512 Taylor-Green Vortex on GPU, with
+       results/graphs [NOT YET DRAFTED — can likely be adapted from the
+       original source document, which already contains this content for
+       the compressible module]
+     - Chapter 8 — Other available provisions (e.g. Sod shock tube, etc.)
+       [NOT YET DRAFTED]
+
+   OPEN FLAG (unresolved): Chapter 5 ("all available problems and
+   sub-problems") and Chapter 8 ("other available provisions... Sod shock
+   tube, etc.") appear to overlap or duplicate each other. Not yet decided
+   whether Chapter 8 should be folded into Chapter 5, kept as a separate
+   "how to add/run a new case" companion chapter, or dropped entirely.
+
+4. NON-UNIFORM GRID CLARIFICATION (for the para.py chapter, Chapter 6)
+   STATUS: Noted, NOT YET incorporated into drafted text (theory chapters
+   don't cover this; it belongs in Chapter 6 which hasn't been drafted).
+   - The spacing_type = 'non-uniform' option uses tangent-hyperbolic
+     clustering controlled by the parameter `beta`, which adjusts the
+     distribution/concentration of grid cells in space.
+   - This non-uniform clustering applies ONLY in the x-direction.
+   - The grid is ALWAYS uniform in the y-direction, regardless of
+     spacing_type.
+
+5. THEORY CONTENT DRAFTING REQUEST
+   STATUS: DRAFTED (see Section C for full content).
+   User asked for: (a) the full list of headings/subheadings for the
+   documentation, and (b) drafted theory content for the 4 simulation
+   modules (Chapters 1-4).
+
+   ASSUMPTIONS MADE DURING DRAFTING (flagged to user, not yet confirmed):
+   - Convection module (Ch. 1): Assumed to be incompressible Navier-Stokes
+     equations coupled with passive/active scalar transport (no buoyancy
+     feedback) — i.e. distinguished from Rayleigh-Benard by the ABSENCE of
+     a buoyancy coupling term. User has not yet confirmed this is correct;
+     it might instead be a different formulation (e.g. pure linear
+     advection equation).
+   - Quantum module (Ch. 2): Assumed to be the linear time-dependent
+     Schrodinger equation, with an optional nonlinear Gross-Pitaevskii
+     extension (interaction strength parameter `g`, for BEC modelling).
+     User has not yet confirmed whether the actual solver supports the
+     nonlinear mode, or is linear-only.
+   - Parameter naming conventions used (Re, Pr, Ra, V_type, g, etc.) are
+     best-guess conventions matching the compressible module's existing
+     style in the source document. These MUST be checked against the
+     actual para.py variable names in the codebase before finalizing
+     Chapter 6 (para.py reference chapter).
+
+--------------------------------------------------------------------------------
+SECTION C: ALL GENERATED CONTENT SO FAR
+(This is the full content of the file dhara_documentation_draft.md, as
+generated earlier in the conversation. NOTE: this reflects the ORIGINAL
+chapter numbering, i.e. BEFORE the new "available problems/sub-problems"
+chapter was inserted after Chapter 4. When resuming, chapter numbers 5, 6,
+7 below should be renumbered to 6, 7, 8 respectively per the amendment in
+Section B, item 3.)
+--------------------------------------------------------------------------------
+
+# DHARA — Full Module Documentation (Draft)
+
+---
+
+## Document Outline — Headings & Subheadings
+[NOTE: renumber Chapters 5/6/7 -> 6/7/8, and insert new Chapter 5
+"Available Problems and Sub-Problems" per Section B item 3 above.]
+
+### Chapter 0. Installation Guide
+- 0.1 System Requirements
+- 0.2 Install Conda and Create an Environment
+- 0.3 Install the Core Python Libraries
+- 0.4 Install the CUDA Toolkit (GPU only)
+- 0.5 Install CuPy (GPU only)
+- 0.6 Install MPI and mpi4py (Parallel Runs, optional)
+  - 0.6.1 Manually Download and Install an MPI Implementation
+  - 0.6.2 Install mpi4py
+  - 0.6.3 Launching Parallel Runs (mpirun)
+
+### Chapter 1. Theory — Convection Module
+- 1.1 Governing Equations (Incompressible Navier–Stokes + Scalar Transport)
+- 1.2 Non-Dimensionalization and Governing Parameters
+- 1.3 Closure Relations and Boundary Conditions
+- 1.4 Relationship to the Rayleigh–Bénard Module
+
+### Chapter 2. Theory — Quantum Module
+- 2.1 Governing Equation (Time-Dependent Schrödinger Equation)
+- 2.2 Non-Dimensionalization and Governing Parameters
+- 2.3 Potential Terms and Normalization
+- 2.4 Linear vs. Nonlinear (Gross–Pitaevskii) Mode
+
+### Chapter 3. Theory — Rayleigh–Bénard Convection Module
+- 3.1 Governing Equations (Boussinesq Approximation)
+- 3.2 Non-Dimensionalization and Governing Parameters (Ra, Pr)
+- 3.3 Boundary Conditions and Onset of Convection
+- 3.4 Closure Relations
+
+### Chapter 4. Theory — Compressible Module
+- 4.1 Governing Equations (Compressible Navier–Stokes / Euler)
+- 4.2 Closure Relations
+- 4.3 Non-Dimensionalization and Governing Parameters
+
+### [NEW] Chapter 5. Available Problems and Sub-Problems
+- PLACEHOLDER — content to be supplied by user. Nothing drafted.
+- (Possible overlap with old Chapter 7 "Other Available Provisions" —
+  unresolved, see Section B item 3.)
+
+### Chapter 5 (renumber to 6). The para.py File — Parameters and Configuration
+- 5.1 Simulation Details
+- 5.2 Time-Stepping
+- 5.3 Grid / Domain
+  - 5.3.1 Uniform Grids
+  - 5.3.2 Non-Uniform Grids (beta, x-direction only; y always uniform)
+    [Incorporate Section B item 4 clarification here when drafting]
+- 5.4 Control (Physical) Parameters — per module
+- 5.5 Output / Saving
+- 5.6 CPU vs. GPU Quick Reference
+- 5.7 Running in Parallel
+
+### Chapter 6 (renumber to 7). Example Run — 512 × 512 Taylor–Green Vortex on GPU
+- 6.1 Part 1 — Running the Simulation
+- 6.2 Part 2 — Results
+  - 6.2.1 How the Output Is Saved
+  - 6.2.2 Final Velocity Field
+  - 6.2.3 Energy Budget vs. Time
+  - 6.2.4 Kinetic Energy Decay
+  - 6.2.5 Mass Conservation
+
+### Chapter 7 (renumber to 8). Other Available Provisions (Additional Sub-Problems)
+- 7.1 Compressible Module: Sod Shock Tube, and Other Built-in sub_problem Cases
+- 7.2 Convection Module: Available Test Cases
+- 7.3 Rayleigh–Bénard Module: Available Test Cases
+- 7.4 Quantum Module: Available Test Cases
+- 7.5 Adding a Custom Sub-Problem
+
+---
+
+## Chapter 1. Theory — Convection Module
+
+### 1.1 Governing Equations
+
+The convection module (problem = 'convection') solves the incompressible
+Navier–Stokes equations coupled with the transport of a scalar field phi
+(e.g. a tracer or temperature field with no buoyancy feedback). With
+velocity u and pressure p:
+
+    div(u) = 0
+
+    d(u)/dt + (u . grad)u = -grad(p) + (1/Re) * laplacian(u)
+
+    d(phi)/dt + (u . grad)phi = (1/(Re*Pr)) * laplacian(phi)
+
+Pressure enforces the incompressibility constraint (solved via a
+projection/Poisson step); the scalar phi is transported passively — it does
+not feed back into the momentum equation. This is the key distinction from
+the Rayleigh–Bénard module (Chapter 3), where an analogous scalar
+(temperature) DOES couple back into the momentum equation through a
+buoyancy term.
+
+### 1.2 Non-Dimensionalization and Governing Parameters
+
+Velocity, length, and time are non-dimensionalized by a reference velocity,
+length, and their ratio. The resulting governing (dimensionless) parameters
+are:
+
+| Parameter | Meaning                                                    |
+|-----------|-------------------------------------------------------------|
+| Re        | Reynolds number — ratio of inertial to viscous forces        |
+| Pr        | Prandtl number — ratio of momentum to scalar diffusivity     |
+
+### 1.3 Closure Relations and Boundary Conditions
+
+- Pressure is recovered by solving a Poisson equation from the divergence of
+  the provisional velocity field at each sub-step.
+- No additional equation-of-state closure is required (unlike the
+  compressible module), since the flow is treated as incompressible.
+- Standard boundary options are periodic, no-slip/no-penetration wall, and
+  Dirichlet/Neumann conditions on phi, selected per sub-problem.
+
+### 1.4 Relationship to the Rayleigh–Bénard Module
+
+The convection module can be viewed as the Rayleigh–Bénard module
+(Chapter 3) with the buoyancy coupling term switched off — i.e. the scalar
+field is carried by the flow but does not drive it. This makes it useful
+both as a standalone passive-scalar transport solver and as a
+numerical/verification baseline for the Rayleigh–Bénard module.
+
+---
+
+## Chapter 2. Theory — Quantum Module
+
+### 2.1 Governing Equation
+
+The quantum module (problem = 'quantum') solves the time-dependent
+Schrödinger equation for a complex wavefunction psi(x, t) in a prescribed
+external potential V(x):
+
+    i*hbar * d(psi)/dt = -(hbar^2 / 2m) * laplacian(psi) + V(x) * psi
+
+### 2.2 Non-Dimensionalization and Governing Parameters
+
+Lengths, times, and energies are non-dimensionalized using a reference
+length L, mass m, and hbar, giving the non-dimensional evolution equation:
+
+    i * d(psi)/dt = -(1/2) * laplacian(psi) + V_tilde(x) * psi
+
+| Parameter | Meaning                                                          |
+|-----------|--------------------------------------------------------------------|
+| V_type    | Form of the external potential (e.g. harmonic, well, barrier)      |
+| g         | Nonlinear interaction strength (§2.4; zero for the linear case)    |
+
+### 2.3 Potential Terms and Normalization
+
+The wavefunction is normalized so that the integral of |psi|^2 over all
+space equals 1, interpreted as a probability density. Supported built-in
+potentials include harmonic-oscillator wells, finite/infinite square wells,
+and barrier/step potentials for tunnelling test cases; custom potentials can
+be supplied as a grid-defined array.
+
+### 2.4 Linear vs. Nonlinear (Gross–Pitaevskii) Mode
+
+Setting a nonzero interaction strength g adds a cubic nonlinear term,
+switching the solver from the linear Schrödinger equation to the
+Gross–Pitaevskii equation, used for mean-field modelling of Bose–Einstein
+condensates:
+
+    i * d(psi)/dt = -(1/2) * laplacian(psi) + V_tilde(x) * psi + g * |psi|^2 * psi
+
+With g = 0 the solver reduces to the standard linear Schrödinger equation of
+§2.1–2.2.
+
+---
+
+## Chapter 3. Theory — Rayleigh–Bénard Convection Module
+
+### 3.1 Governing Equations
+
+The Rayleigh–Bénard module (problem = 'RBC') solves the Boussinesq
+equations: incompressible flow driven by a buoyancy force arising from
+temperature-dependent density variations, with the temperature field T now
+coupled back into the momentum equation.
+
+    div(u) = 0
+
+    d(u)/dt + (u . grad)u = -grad(p) + sqrt(Pr/Ra) * laplacian(u) + T * z_hat
+
+    d(T)/dt + (u . grad)T = (1/sqrt(Ra*Pr)) * laplacian(T)
+
+Here z_hat is the unit vector opposing gravity (buoyancy acts vertically),
+and the Boussinesq approximation treats density variations as negligible
+except in this buoyancy term.
+
+### 3.2 Non-Dimensionalization and Governing Parameters
+
+Non-dimensionalization uses the layer depth as the length scale and a
+free-fall/diffusive time scale, giving two controlling dimensionless groups:
+
+| Parameter | Meaning                                                              |
+|-----------|------------------------------------------------------------------------|
+| Ra        | Rayleigh number — ratio of buoyancy driving to dissipative effects     |
+| Pr        | Prandtl number — ratio of momentum to thermal diffusivity              |
+
+### 3.3 Boundary Conditions and Onset of Convection
+
+The classic configuration imposes fixed temperatures at the top and bottom
+boundaries (hot below, cold above) with no-slip or free-slip velocity
+conditions, and periodic conditions in the horizontal direction(s). Linear
+stability theory predicts a critical Rayleigh number Ra_c (order 10^3,
+depending on boundary conditions) below which the conductive state is
+stable and above which convective rolls/cells develop; Ra in para.py should
+be set relative to this threshold to select conductive vs. convective
+regimes.
+
+### 3.4 Closure Relations
+
+- Pressure is obtained via the same projection/Poisson approach as the
+  convection module (Chapter 1).
+- The buoyancy term couples momentum and temperature directly; no separate
+  equation of state is needed since density variation is linearized in T
+  under the Boussinesq approximation.
+
+---
+
+## Chapter 4. Theory — Compressible Module
+
+### 4.1 Governing Equations
+
+The compressible module (problem = 'hydro') solves the compressible
+Navier–Stokes equations in non-dimensional form. With state vector
+q = (rho, rho*u, rho*v, E):
+
+    d(rho)/dt + div(rho * u) = 0
+
+    d(rho*u)/dt + div(rho * u ⊗ u + p*I) = div(tau) + f
+
+    d(E)/dt + div[(E + p) * u] = div(tau . u) + div(K * grad(T))
+
+Dropping the viscous terms recovers the Euler equations (problem = 'euler'),
+on which the hydro solver is built.
+
+### 4.2 Closure Relations
+
+- Equation of state:
+    p = (gamma - 1) * (E - 0.5 * rho * |u|^2)
+    p = R_gas * rho * T,  with R_gas = 1 / (gamma * Ma^2)
+- Viscous stress (Newtonian):
+    tau_xx = mu * ((4/3)*d(u)/dx - (2/3)*d(v)/dy)
+    tau_xy = mu * (d(u)/dy + d(v)/dx)
+- Transport coefficients:
+    mu = 1 / Re
+    K = 1 / (Ma^2 * (gamma - 1) * Re * Pr)
+- f is an optional forcing term (forcing = True).
+
+### 4.3 Non-Dimensionalization and Governing Parameters
+
+| Parameter | Meaning                                     |
+|-----------|-----------------------------------------------|
+| gamma     | Ratio of specific heats                        |
+| Ma        | Mach number                                    |
+| Re        | Reynolds number                                |
+| Pr        | Prandtl number (implicit in K, above)          |
+
+---
+
+(End of drafted outline and Chapters 1–4. Chapters 0 and 5-8 [per amended
+numbering] not yet drafted.)
+
+================================================================================
+SECTION D: SUGGESTED NEXT STEPS (for the new chat)
+================================================================================
+1. Confirm/correct the two flagged assumptions in Section B item 5
+   (Convection module formulation; Quantum module linear vs. nonlinear).
+2. Provide actual para.py parameter names to replace best-guess naming
+   before drafting Chapter 6 (renumbered).
+3. Decide the Chapter 5 vs. Chapter 8 overlap question (Section B item 3).
+4. Supply sub-problem/available-problems content for the new Chapter 5.
+5. Then proceed to draft: Chapter 0 (installation, with MPI manual-install
+   change), Chapter 5 (available problems/sub-problems, once supplied),
+   Chapter 6 (para.py reference, including non-uniform grid note), Chapter 7
+   (TGV example — can largely reuse/adapt original source document content),
+   Chapter 8 (other provisions, pending the overlap decision).
+
+================================================================================
+END OF HANDOFF FILE
+================================================================================
